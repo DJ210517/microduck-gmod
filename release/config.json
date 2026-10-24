@@ -3,5 +3,7 @@
   "repository_name": "microduck-gmod",
   "repository_url": "https://github.com/DJ210517/microduck-gmod",
   "runtime_download_url": "https://github.com/DJ210517/microduck-gmod/releases/download/v0.1.0/MicroDuck_Runtime_Windows_x64.zip",
-  "workshop_url": null
+  "workshop_url": "https://steamcommunity.com/sharedfiles/filedetails/?id=3826258817",
+  "workshop_visibility": "private",
+  "setup_download_url": "https://github.com/DJ210517/microduck-gmod/releases/download/v0.1.0/MicroDuck_Setup_Windows_x64.exe"
 }

@@ -1,0 +1,76 @@
+[h1]A tiny duck. Real balance. Actual neural policies.[/h1]
+Bring Pollen Robotics' MicroDuck into your sandbox. This little biped uses trained neural networks to move its joints, keep its balance, and perform tricks. Its movements come from the running policy and physics simulation.
+
+[h2]Quick setup — Windows 64-bit[/h2]
+[b]Windows 64-bit only. The Workshop subscription alone is not enough.[/b]
+
+[url=https://github.com/DJ210517/microduck-gmod/releases/download/v0.1.0/MicroDuck_Setup_Windows_x64.exe][b]DOWNLOAD MICRODUCK SETUP[/b][/url]
+[url={{INSTALL_GUIDE_URL}}][b]FULL DOWNLOAD & INSTALL GUIDE[/b][/url]
+[url=https://github.com/DJ210517/microduck-gmod/releases/tag/v0.1.0]GitHub release / manual download[/url]
+
+[h2]Features[/h2]
+[list]
+[*]A walking MicroDuck driven by Pollen Robotics' original learned policies.
+[*]Sit, stand, somersault, and kick with either foot.
+[*]Kick small, lightweight props placed in front of its feet.
+[*]A separate Roller Duck with four freely rotating wheels, steering, braking, and a learned crouch-and-rise move.
+[*]A pistol-shaped remote with keyboard controls.
+[*]Switch between a chase camera and your normal player viewpoint.
+[*]Turn the motors off and watch the robot collapse; reset it when needed.
+[*]Detailed robot models, all seven policies, and collision assets included.
+[/list]
+
+[h2]Install in a few clicks[/h2]
+[olist]
+[*]Subscribe to this addon, then fully close Garry's Mod.
+[*]Run [url=https://github.com/DJ210517/microduck-gmod/releases/download/v0.1.0/MicroDuck_Setup_Windows_x64.exe]MicroDuck Setup[/url]. It finds your Steam installation. Click [b]Install / Repair Runtime[/b].
+[*]Once it reports [b]Installed and verified[/b], start [b]64-bit GMod[/b]. Try Sandbox on [b]gm_flatgrass[/b] first.
+[/olist]
+
+Setup includes the matching runtime, checks the files, and backs up older DLLs. No Python, manual ZIP extraction, or folder copying is required. If the Microsoft Visual C++ x64 runtime needs updating, setup provides Microsoft's official download link.
+
+Prefer installing manually? [url={{RUNTIME_DOWNLOAD_URL}}]Runtime ZIP[/url] · [url={{INSTALL_GUIDE_URL}}]Manual instructions and troubleshooting[/url]
+Workshop supplies the addon; the small setup program installs its native DLLs.
+
+[b]Updating from the development version?[/b] Move the old loose microduck_real_ai addon folder outside garrysmod/addons first. Keep only one addon copy enabled. Close GMod before replacing runtime DLLs.
+
+[h2]Where do I find it?[/h2]
+[b]Entities → MicroDuck[/b] → MicroDuck — Real Policy / MicroDuck — Roller Skates
+[b]Weapons → MicroDuck[/b] → MicroDuck Remote
+
+Equip the remote, aim at a duck, and [b]left-click[/b] to pair and drive it. The remote does not shoot bullets.
+
+[h2]Remote controls[/h2]
+[list]
+[*][b]W / S[/b] — walk forward/backward. On rollers: push/brake.
+[*][b]A / D[/b] — turn or steer.
+[*][b]Left / right arrows[/b] — strafe with the walking duck.
+[*][b]Shift + E[/b] — switch player viewpoint / chase camera.
+[*][b]E[/b] — sit/stand, or crouch and rise on rollers.
+[*][b]F[/b] — somersault with the walking duck.
+[*][b]Shift + left / right click[/b] — left/right kick with the walking duck.
+[*][b]Right-click[/b] — motors on/off.
+[*][b]R[/b] — reset to spawn.
+[*][b]Space[/b] — return movement to your player.
+[/list]
+In player view, mouse look and your pistol remain visible while WASD drives the duck. Your player stays in place until you press Space. Left-click the duck again to reconnect.
+
+[h2]A few things to know[/h2]
+[list]
+[*]Experimental release, tested in local single-player on gm_flatgrass. Multiplayer and complex uneven terrain are not validated.
+[*]Stop and balance before tricks. Stand up before walking away from a seated position.
+[*]Kicks are blind moves. Place a lightweight prop just ahead of the chosen foot; the duck does not see or aim at it.
+[*]Roller wheels coast when you release W. Hold S for gradual braking. A fallen roller duck may need R to recover.
+[*]Individual robot pieces cannot be grabbed with the physgun. Use the remote to control and reset the duck.
+[*]Prop interaction uses approximate collision proxies. Very light props can react strongly.
+[/list]
+
+[h2]Source & credits[/h2]
+[url=https://github.com/DJ210517/microduck-gmod]GMod port source and issue tracker[/url]
+[url=https://github.com/pollen-robotics/microduck]Pollen Robotics — original MicroDuck robot and models[/url]
+[url=https://github.com/pollen-robotics/microduck_rl]Pollen Robotics — training code[/url]
+[url=https://huggingface.co/pollen-robotics/microduck-policies]Pollen Robotics — trained policies[/url]
+[url=https://github.com/google-deepmind/mujoco]MuJoCo — physics engine[/url]
+[url=https://github.com/Rhoban/bam]Rhoban BAM — motor model reference[/url]
+
+Original policy weights are preserved. Code notices: Apache-2.0. Adapted robot meshes: CC BY-NC-SA 4.0. License notices are included with the addon and runtime.

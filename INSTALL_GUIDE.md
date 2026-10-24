@@ -2,32 +2,57 @@
 
 Windows 64-bit • Experimental single-player release • Walking and roller variants
 
-You need **two parts**: the Workshop addon and the matching native runtime ZIP.
-The Workshop download includes the robot models, remote, collision assets and
-all seven learned policies. The companion ZIP supplies the native physics engine.
+You need the Workshop addon and its native runtime. The recommended setup program
+installs the runtime automatically; the Workshop supplies the models and policies.
 
-## 1. Download
+## Quick setup (recommended)
 
-- Open the [v0.1.0 download page](https://github.com/DJ210517/microduck-gmod/releases/tag/v0.1.0).
-- Download [MicroDuck_Runtime_Windows_x64.zip](https://github.com/DJ210517/microduck-gmod/releases/download/v0.1.0/MicroDuck_Runtime_Windows_x64.zip).
-- While the Workshop item is being prepared, also download
-  [microduck_real_ai.gma](https://github.com/DJ210517/microduck-gmod/releases/download/v0.1.0/microduck_real_ai.gma)
-  and follow **Manual install without Workshop** below.
-- Once published, subscribing to **MicroDuck — Real AI Walking & Roller Skates**
-  replaces the manual GMA download. The runtime ZIP is still required.
-- Install the latest supported **Microsoft Visual C++ v14 x64 Redistributable**
-  from [Microsoft's official download page](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist).
+1. Subscribe to [MicroDuck on Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3826258817), then fully close Garry's Mod.
+2. Download and run [MicroDuck_Setup_Windows_x64.exe](https://github.com/DJ210517/microduck-gmod/releases/download/v0.1.0/MicroDuck_Setup_Windows_x64.exe).
+3. The setup program finds GMod through Steam. Check the folder and click **Install / Repair Runtime**.
+4. After setup reports **Installed and verified**, start **64-bit GMod** and spawn the duck.
 
-You do **not** need Python, ONNX Runtime, a GPU, or the original robotics repository.
-GitHub's automatically generated "Source code" archives are for developers;
-they do not replace the runtime ZIP.
+No manual ZIP extraction, folder copying, Python, ONNX Runtime, or GPU setup is
+needed. The setup EXE contains the exact bridge API 4 / MuJoCo 3.17.0 runtime
+from this release. It requires Windows and the .NET Framework included with
+Windows 10/11; it does not download or install a separate .NET runtime.
 
-## 2. Install the runtime
+The Workshop item is **private while being tested**. If you cannot access it,
+download [microduck_real_ai.gma](https://github.com/DJ210517/microduck-gmod/releases/download/v0.1.0/microduck_real_ai.gma)
+and use **Manual install without Workshop** below, alongside the setup program.
+
+### What setup does
+
+- Finds GMod across Steam library folders, with **Browse** as a fallback.
+- Installs only the two required DLLs and their notices; checks their SHA-256 hashes.
+- Verifies that Windows can load both DLLs.
+- Refuses to replace files while GMod is running. Close the game and try again.
+- Backs up different existing DLLs under `garrysmod/data/microduck_installer/backups`.
+- Restores the previous runtime files if installation fails.
+
+If the Microsoft Visual C++ x64 runtime needs updating, use setup's
+**Microsoft Visual C++ x64 download** link, install Microsoft's current v14 x64
+Redistributable, then run MicroDuck setup again. Setup does not change Windows
+security settings or automatically request administrator access.
+
+If more than one GMod installation is detected, choose the one you play. If you
+use an unusual redirected folder layout, use the manual method below. The setup
+program installs the native runtime; it does not subscribe for you, replace your
+addon, or change your Steam launch settings.
+
+### Existing development / manual installs
+
+Keep only one addon copy enabled. Before switching to Workshop, move the old
+loose `garrysmod/addons/microduck_real_ai` folder or manual GMA outside the addons
+folder. Setup reports a detected loose development copy and leaves it untouched.
+
+## Manual ZIP installation (alternative)
+
 
 1. Fully close Garry's Mod.
 2. In Steam, right-click **Garry's Mod → Manage → Browse local files**.
    This opens the installation folder, normally named `GarrysMod`.
-3. Extract **MicroDuck_Runtime_Windows_x64.zip** somewhere convenient.
+3. Download [MicroDuck_Runtime_Windows_x64.zip](https://github.com/DJ210517/microduck-gmod/releases/download/v0.1.0/MicroDuck_Runtime_Windows_x64.zip) and extract it somewhere convenient.
 4. Copy the ZIP's **garrysmod** folder into that installation folder and merge
    the folders. Replace older copies of the two MicroDuck runtime files when updating.
 5. Check that these exact files now exist:
@@ -47,7 +72,7 @@ folder, `GarrysMod/bin/win64`, or an extra nested `garrysmod/garrysmod` folder.
 Launch the **64-bit** game after copying. Loading a new map without closing
 the game does not replace an already loaded DLL.
 
-## 3. Spawn and drive
+## Spawn and drive
 
 Start **Sandbox → gm_flatgrass** for the first test. Open the spawn menu:
 
@@ -85,8 +110,8 @@ may need **R**; an automatic roller get-up policy is not included.
 ## Updating
 
 Steam updates the Workshop content. If a release requires a newer native runtime,
-close the game, download that release's runtime ZIP, copy its two DLLs over the
-old versions, and restart. This release requires **bridge API 4 / MuJoCo 3.17.0**.
+close the game and run that release's setup program again. Manual ZIP users can
+replace the two DLLs instead. This release requires **bridge API 4 / MuJoCo 3.17.0**.
 
 Remove or move your old loose `garrysmod/addons/microduck_real_ai` development
 copy out of the game before using the Workshop version. Keep only one enabled copy.
