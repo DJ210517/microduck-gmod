@@ -1,0 +1,135 @@
+{
+  "repository": "pollen-robotics/microduck-policies",
+  "revision": "665ae4eb20bfe13bca1ef4ea6d4bb6b4a096e448",
+  "control_hz": 50,
+  "obs_len": 61,
+  "action_len": 14,
+  "policies": {
+    "sitstand": {
+      "file": "alpha_sitstand.onnx",
+      "url": "https://huggingface.co/pollen-robotics/microduck-policies/resolve/665ae4eb20bfe13bca1ef4ea6d4bb6b4a096e448/alpha_sitstand.onnx",
+      "sha256": "a6f102d9fd655782ba85bfffe18175c34621da719cffcdd673be7982a06fc254",
+      "metadata": {
+        "run_path": "None",
+        "joint_names": "left_hip_yaw,left_hip_roll,left_hip_pitch,left_knee,left_ankle,neck_pitch,head_pitch,head_yaw,head_roll,right_hip_yaw,right_hip_roll,right_hip_pitch,right_knee,right_ankle",
+        "joint_stiffness": "1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000",
+        "joint_damping": "0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000",
+        "default_joint_pos": "0.000,-0.087,-0.458,-0.005,0.453,0.349,0.349,0.000,0.000,0.000,0.087,0.458,0.005,-0.453",
+        "command_names": "twist,head_pose",
+        "observation_names": "base_ang_vel,projected_gravity,joint_pos,joint_vel,actions,command,head_command,body_command",
+        "action_scale": "1.0"
+      },
+      "manifest": {
+        "file": "alpha_sitstand.onnx",
+        "name": "sitstand",
+        "kind": "scripted",
+        "command": {
+          "encoding": "posture_flag",
+          "slot": "twist.vx",
+          "sit": 1.0,
+          "stand": 0.0,
+          "idle": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "ramp_s": 2.0,
+        "unwind_s": 1.0,
+        "description": "Gentle sit and stand, head steerable while seated. From v6 it no longer tips over backward when the head moves abruptly while seated.",
+        "training": {
+          "task_id": "Mjlab-SitStand-Flat-MicroDuck",
+          "repo": "pollen-robotics/microduck_rl",
+          "commit": "77ffadf",
+          "branch": "sitstand_no_fall_back",
+          "dirty": false,
+          "run": "pollen-robotics/mjlab_microduck/vfhxgrum",
+          "checkpoint": 2250,
+          "exported": "2026-10-01T00:00:00Z"
+        }
+      }
+    },
+    "roulade": {
+      "file": "roulade.onnx",
+      "url": "https://huggingface.co/pollen-robotics/microduck-policies/resolve/665ae4eb20bfe13bca1ef4ea6d4bb6b4a096e448/roulade.onnx",
+      "sha256": "3d60da08fc13f29c1b57f41977aa898132c0d60042100149d8e775affcbca32b",
+      "metadata": {
+        "run_path": "None",
+        "joint_names": "left_hip_yaw,left_hip_roll,left_hip_pitch,left_knee,left_ankle,neck_pitch,head_pitch,head_yaw,head_roll,right_hip_yaw,right_hip_roll,right_hip_pitch,right_knee,right_ankle",
+        "joint_stiffness": "1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000",
+        "joint_damping": "0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000",
+        "default_joint_pos": "0.000,-0.087,-0.458,-0.005,0.453,0.349,0.349,0.000,0.000,0.000,0.087,0.458,0.005,-0.453",
+        "command_names": "twist",
+        "observation_names": "base_ang_vel,projected_gravity,joint_pos,joint_vel,actions,command,head_command,body_command",
+        "action_scale": "1.0"
+      },
+      "manifest": {
+        "file": "roulade.onnx",
+        "kind": "episodic",
+        "duration_s": 1.0,
+        "chain": true
+      }
+    },
+    "kick_left": {
+      "file": "ball_kick_left.onnx",
+      "url": "https://huggingface.co/pollen-robotics/microduck-policies/resolve/665ae4eb20bfe13bca1ef4ea6d4bb6b4a096e448/ball_kick_left.onnx",
+      "sha256": "d6928284dccd3dd61e08bf2f760effa74309fbefd97b2b31afb2a60f526d196a",
+      "metadata": {
+        "run_path": "None",
+        "joint_names": "left_hip_yaw,left_hip_roll,left_hip_pitch,left_knee,left_ankle,neck_pitch,head_pitch,head_yaw,head_roll,right_hip_yaw,right_hip_roll,right_hip_pitch,right_knee,right_ankle",
+        "joint_stiffness": "1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000",
+        "joint_damping": "0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000",
+        "default_joint_pos": "0.000,-0.087,-0.458,-0.005,0.453,0.349,0.349,0.000,0.000,0.000,0.087,0.458,0.005,-0.453",
+        "command_names": "twist",
+        "observation_names": "base_ang_vel,projected_gravity,joint_pos,joint_vel,actions,command,head_command,body_command",
+        "action_scale": "1.0"
+      },
+      "manifest": {
+        "file": "ball_kick_left.onnx",
+        "name": "kick_left",
+        "kind": "episodic",
+        "duration_s": 0.5
+      }
+    },
+    "kick_right": {
+      "file": "ball_kick_right.onnx",
+      "url": "https://huggingface.co/pollen-robotics/microduck-policies/resolve/665ae4eb20bfe13bca1ef4ea6d4bb6b4a096e448/ball_kick_right.onnx",
+      "sha256": "147a32c388c6b19111b3ac3b550a9a6dc8b8bf267118af4d8c3712522eedb5af",
+      "metadata": {
+        "run_path": "None",
+        "joint_names": "left_hip_yaw,left_hip_roll,left_hip_pitch,left_knee,left_ankle,neck_pitch,head_pitch,head_yaw,head_roll,right_hip_yaw,right_hip_roll,right_hip_pitch,right_knee,right_ankle",
+        "joint_stiffness": "1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000,1.000",
+        "joint_damping": "0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000",
+        "default_joint_pos": "0.000,-0.087,-0.458,-0.005,0.453,0.349,0.349,0.000,0.000,0.000,0.087,0.458,0.005,-0.453",
+        "command_names": "twist",
+        "observation_names": "base_ang_vel,projected_gravity,joint_pos,joint_vel,actions,command,head_command,body_command",
+        "action_scale": "1.0"
+      },
+      "manifest": {
+        "file": "ball_kick_right.onnx",
+        "name": "kick_right",
+        "kind": "episodic",
+        "duration_s": 0.5
+      }
+    }
+  },
+  "manifest_sha256": "c566390738dd90a54c1e2de829aaab0e904c636949e2c2c6158ee7bbb889b818",
+  "runtime_sources": {
+    "microduck_commit": "942e58e3aa6dbb28e7037203fff11866122c7567",
+    "microduck_rl_commit": "b02fdea4902c2b93b7d34a83a6f05da4ececb7d3",
+    "runtime": "robotd/src/control.rs",
+    "rehearsal": "scripts/infer_policy.py"
+  },
+  "gmod_runtime": {
+    "sit_seconds": 2,
+    "rise_seconds": 1,
+    "roll_min_seconds": 1,
+    "roll_max_seconds": 5,
+    "kick_seconds": 0.5,
+    "kick_command": "All 13 command entries are zero; action scale 1.0. Start standing, preserve previous raw action, then return to zero-command velstand recovery. Both kicks use the pinned official manifest duration of 0.5s; the upstream infer_policy.py interactive rehearsal CLI independently defaults --kick-duration to 3s.",
+    "kick_prop_placement": "Upstream rehearsal places a radius0.035m ball at yaw-frame offset x0.09m, y+0.042m for left / -0.042m for right. This is a blind one-shot policy: no prop perception or aiming command.",
+    "roll_duration_note": "Manifest is 1s; official infer_policy.py rehearsal default is 2s. With the port servo 1s interrupts at155deg, and fixed2s can hand off while still inverted. End after measured unwrapped body-gravity pitch >=5.75rad and gravity z < -0.95, after at least1s; bounded5s fallback matches training episode length. A roll can include lateral twist and heading change. No servo changes.",
+    "recovery": "Velstand receives zero command after skills or sustained walking fall until gravity z < -0.95, gyro magnitude < 0.8rad/s and vertical speed <0.2m/s for0.3s. Only neural commands are gated.",
+    "previous_action": "Preserve raw previous policy output across policy switches."
+  }
+}

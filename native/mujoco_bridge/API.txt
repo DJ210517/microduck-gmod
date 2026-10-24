@@ -1,0 +1,134 @@
+Native MicroDuck MuJoCo bridge, Windows x64
+
+Build: .venv\Scripts\python.exe native\mujoco_bridge\build.py --module-name microduck_mujoco4
+Test:  .venv\Scripts\python.exe tests\roller_v4_checks.py
+Output: build/native/microduck_mujoco4/gmsv_microduck_mujoco4_win64.dll
+Canonical build can use build.py --module-name microduck_mujoco after restart.
+No build/test script installs the binary or controls GMod.
+
+Lua entry after installation: require("microduck_mujoco"); global microduck_mujoco
+paths() -> {game_dir, data_dir, lua_bin_dir, mujoco_dll} absolute portable paths
+create(xml_absolute_path [, mujoco_dll_absolute_path]) -> integer handle
+destroy(handle) -> true; stale handles are rejected
+reset(handle, root_position3, root_quaternion_wxyz4) -> true
+snapshot(handle) -> {nq, nv, qpos[nq], qvel[nv], simtime, pending_time, motors_enabled}
+restore(handle, snapshot_table) -> true
+set_motors(handle, boolean) -> true
+step(handle, elapsed_seconds, absolute_joint_targets14) -> simulated_seconds_advanced
+state(handle) -> {
+  simtime, pending_time, advanced, q14, qd14, gyro3, gravity3,
+  root_position3, root_rotation9, root_velocity3 (world m/s),
+  bodies = {{id, name, com3, rotation9}, ...15 walking /19 roller},
+  wheel_angles4, wheel_velocities4 (zero on the walking robot)
+}
+set_proxy(handle, index1to32, position3, quaternion_wxyz4, halfsize3, active) -> true
+set_proxy_velocity(handle, index1to32, world_linear3, world_angular3) -> true
+push(handle, robot_body_index1to15_or19, world_force3, world_COM_torque3) -> true
+applywrench is an alias of push.
+contacts(handle) -> {
+  dt, overflow,
+  proxy_impulses = {{index, linear3, angular3}, ...nonzero only},
+  points = {{body1, body2, geom1, geom2, proxy1, proxy2, pos3,
+    force_on_body2, torque_on_body2, impulse_on_body2,
+    angular_impulse_on_body2}, ...}
+}
+
+All lengths are metres, times seconds, angles radians, masses kilograms.
+Force is newtons; COM torque is newton-metres. Contact linear impulse is N*s;
+angular impulse is N*m*s. There is NO mass_scale=100 in this simulation.
+The caller must convert GMod units at the boundary. Contact force/impulse on
+body1 is the negative of body2. Proxy aggregate angular impulse is about the
+proxy body's origin/COM, which may differ from the real Source prop's COM.
+Raw body/geom IDs inside contacts are MuJoCo model IDs (world=0); proxy indices
+are 1..32, zero means not a proxy. state.body.id is the stable robot index for
+push: trunk then joint children in the original policy joint order, followed
+by LF,LR,RF,RR passive wheel bodies on the roller model. V4 advertises
+roller_support=true. Passive wheel bearing frictionloss remains0.003Nm even
+when motor power is off; motor commands never drive the wheel joints.
+
+Rotations are row-major world-from-original-MuJoCo-body 3x3 matrices. They are
+NOT the rendered v5 model axes. Apply the verified constant body-to-model
+rotation, and render at each COM, to reuse existing Source visual meshes.
+Root position is the original root body frame origin; body.com is its COM.
+gyro is the original imu_ang_vel sensor in its trained frame; gravity is world
+down represented in original trunk axes. q is absolute joint angle, so the
+policy observation must subtract HOME and feed its original previous action.
+The module does not evaluate or modify the NN. Lua must run the real NN at 50Hz.
+
+step holds the supplied targets while advancing fixed .005-second substeps,
+with virtual hinge J=.0018, KP=.55, KD=.053, bounded internal torque .96 Nm.
+No armature is added to body inertia. No world support forces are applied.
+dt accepts [0,.1]. Fractional time is accumulated, not discarded; a call can
+advance zero substeps. Contacts contain all impulses from the LAST step call;
+read repeatedly if needed, but apply each batch to Source props exactly once.
+Per-contact force is instantaneous at that substep; aggregate impulses span
+the returned contacts.dt. At most 2048 detailed points are returned; overflow
+counts omitted points, while all proxy aggregate impulses are still summed.
+
+push adds a world-space force/torque, held across all substeps of the next
+advancing step call and then cleared. Multiple pushes before stepping ADD.
+This API accepts forces, not impulses. To apply a known impulse over .005s,
+divide it by .005 and step .005 once. Reset zeroes robot velocities and time,
+restores HOME, clears pending pushes, and preserves externally supplied proxy
+poses/masks and current motor power setting. Motor toggling preserves state.
+
+snapshot/restore transfer robot dynamics to a newly compiled terrain scene.
+V4 snapshots include nq/nv: walking21/20 or roller25/24. These dimensions must
+match the destination model. qpos is root XYZ, root quaternion WXYZ, then joint
+coordinates in compiled model order (not policy order); qvel follows nv.
+Treat these arrays as opaque: snapshot and restore the exact returned values.
+motors_enabled is a required boolean. simtime is nonnegative seconds;
+pending_time is the accumulated fraction below .005 seconds. Restore validates
+all input before mutation and preserves these values without teleporting or
+zeroing velocity. It clears old contacts, impulses, pending native pushes and
+solver warm starts; transforms and contacts are rebuilt for the new scene.
+Consequently, contact-rich future trajectories are numerically close rather
+than bit-identical. Terrain must use the SAME coordinate origin as the old
+scene. Only terrain selection center may move during local coverage refresh.
+The caller keeps NN previous action/targets, heading/locomotion state and
+queued external impulses in Lua, and resends the current proxy poses/velocities.
+Restore retains any proxy configuration already supplied to the destination;
+it does not copy proxies from the source. Keep the old handle until creating
+and restoring its replacement succeeds, then destroy the old handle.
+
+MuJoCo normally auto-resets unstable dynamics to its initial position. V3
+detects BADQPOS/QVEL/QACC/CTRL warnings and simulation-clock discontinuities,
+returns an error, and rejects later step/state/snapshot reads until an explicit
+reset or valid restore. The caller must retain its last rendered valid state
+and display the solver error. Finite-state validation alone cannot detect an
+automatic reset, because the resulting initial state is finite.
+
+Scenes use the exact original walking(nq21/nv20) or roller(nq25/nv24) robot plus static terrain and
+up to32 mocap boxes. Prepared proxies have one box each with identity local
+geom/inertial orientation and zero COM/geom offsets. They compile with masks1
+while parked below the world so BVHs exist; create disables their masks.
+set_proxy updates size, radius, geom bounds AND body BVH bounds before enabling
+contact. The caller supplies real map terrain; no implicit floor is inserted.
+set_proxy clears that proxy's velocity; call set_proxy_velocity AFTER it on
+each update. Linear velocity is world m/s AT THE PROXY CENTER, angular velocity
+is world radians/s. Account for omega cross (proxy center minus Source COM).
+The bridge adds full prescribed rigid velocity at each contact, including normal
+motion and angular friction, to the constraint velocity/reference acceleration.
+Its cone mapping follows MuJoCo mj_addSurfaceVel and is tested against a massive
+dynamic reference for translations, vertical motion and rotations. This bias is
+specific to the fixed Euler integrator used by this bridge.
+
+This is real native reduced-coordinate rigid-body/contact simulation, not
+recorded animation or a Python pose server. GMod meshes mirror the resulting
+body states. Source prop coupling is partitioned: proxies are kinematic during
+each MuJoCo substep; Source receives equal-and-opposite impulses afterward.
+That coupling is approximate and has frame latency/infinite proxy effective
+mass inside one solve. It requires in-game validation, especially fast/light
+props. V2 includes their supplied velocity in contact response but does not
+create additional dynamic proxy DOFs inside the MuJoCo solve.
+Use Source-side touch/push/physgun/bullet handling to feed external wrenches;
+disable duplicate native Source collision response on visual robot mirrors.
+
+Requires the matching MuJoCo 3.17.0 DLL and its Microsoft runtime dependencies.
+Version is checked before struct access. The optional create DLL path permits
+explicit deployment. Otherwise runtime discovery uses the loaded bridge DLL's
+own absolute location in garrysmod/lua/bin and adjacent mujoco.dll; no workspace
+path is embedded. paths().game_dir refers to the garrysmod content directory.
+Maximum eight live simulation handles; entities must destroy on removal, and
+module close releases all model/data instances. No C++ runtime/SDK dependency
+is introduced by this bridge itself (imports kernel32 and system msvcrt only).

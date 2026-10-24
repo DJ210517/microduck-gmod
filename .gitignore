@@ -1,0 +1,6 @@
+.venv/
+upstream/
+build/
+dist/
+backups/
+__pycache__/

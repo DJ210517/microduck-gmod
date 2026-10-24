@@ -1,0 +1,42 @@
+[h1]MicroDuck — Real AI Walking & Roller Skates[/h1]
+A tiny physical robot driven by Pollen Robotics' actual learned neural policies.
+Walking, sitting, standing, somersaults, left/right kicks, and a separate roller
+variant with four freely rotating wheels and a learned crouch cycle.
+
+[h2]Required companion download — Windows 64-bit[/h2]
+Subscribing supplies the models, controller and learned policies. You must also
+install the matching native physics runtime. Workshop cannot distribute DLLs.
+
+Runtime download: {{RUNTIME_DOWNLOAD_URL}}
+Download/install guide: {{INSTALL_GUIDE_URL}}
+
+Close GMod. Extract MicroDuck_Runtime_Windows_x64.zip and merge its garrysmod
+folder into your GarrysMod installation. The final files belong directly in
+garrysmod/lua/bin. Install Microsoft's current Visual C++ v14 x64 Redistributable
+if needed, then start 64-bit GMod. No Python or GPU is required.
+
+[h2]Spawn[/h2]
+Sandbox → Entities → MicroDuck → Real Policy or Roller Skates.
+Weapons → MicroDuck → MicroDuck Remote. Aim and left-click to drive.
+
+[h2]Remote[/h2]
+W/S walk; A/D turn; arrow keys strafe. On rollers, W pushes and S brakes.
+Shift+E switches between your player viewpoint and the chase camera.
+E sits/stands, or runs the roller crouch cycle. F performs a walking somersault.
+Shift+left/right click triggers the corresponding walking kick.
+Right-click toggles motors; R resets; Space returns movement to your player.
+Stop and balance before tricks. Place a small prop near the chosen foot to kick.
+
+[h2]Scope[/h2]
+Experimental local single-player addon tested on gm_flatgrass. Windows 64-bit
+native runtime required. Multiplayer and uneven terrain remain unverified.
+Roller falls may require R. Individual-piece physgun pickup is disabled.
+Prop coupling is approximate. There is no path-planning or visual prop aiming.
+
+[h2]Credits[/h2]
+Pollen Robotics: robot, policies and original models.
+https://github.com/pollen-robotics/microduck
+https://github.com/pollen-robotics/microduck_rl
+https://huggingface.co/pollen-robotics/microduck-policies
+MuJoCo: https://github.com/google-deepmind/mujoco
+Code: Apache-2.0 notices. Adapted meshes: CC BY-NC-SA 4.0.
